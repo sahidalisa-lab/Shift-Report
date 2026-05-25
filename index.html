@@ -19,62 +19,95 @@
 
 body{
     font-family:'Segoe UI',sans-serif;
-    background:linear-gradient(135deg,#dfefff,#f7fbff);
+    background:#0f172a;
+    color:white;
     min-height:100vh;
-    padding:40px 20px;
-    color:#2c3e50;
+    display:flex;
 }
 
-.hero{
-    text-align:center;
+/* SIDEBAR */
+
+.sidebar{
+    width:250px;
+    background:#111827;
+    padding:30px 20px;
+    border-right:1px solid rgba(255,255,255,0.1);
+}
+
+.logo{
+    font-size:24px;
+    font-weight:bold;
+    color:#38bdf8;
     margin-bottom:40px;
 }
 
-.hero h1{
-    font-size:42px;
+.menu{
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+}
+
+.menu div{
+    padding:12px;
+    border-radius:10px;
+    background:rgba(255,255,255,0.05);
+}
+
+/* MAIN */
+
+.main{
+    flex:1;
+    padding:40px;
+}
+
+.header{
+    margin-bottom:30px;
+}
+
+.header h1{
+    font-size:38px;
     margin-bottom:10px;
-    color:#1f3c88;
 }
 
-.subtitle{
-    max-width:750px;
-    margin:auto;
+.header p{
+    color:#94a3b8;
     line-height:1.7;
-    color:#555;
-    font-size:16px;
+    max-width:800px;
 }
 
-.main-card{
-    background:rgba(255,255,255,0.75);
-    backdrop-filter:blur(12px);
-    border-radius:25px;
-    padding:30px;
-    box-shadow:0 15px 35px rgba(0,0,0,0.1);
+/* INPUT AREA */
+
+.input-box{
+    background:rgba(255,255,255,0.05);
+    border:1px solid rgba(255,255,255,0.1);
+    border-radius:20px;
+    padding:25px;
+    backdrop-filter:blur(10px);
 }
 
 textarea{
     width:100%;
-    min-height:220px;
-    padding:20px;
+    height:200px;
     border:none;
-    border-radius:20px;
-    resize:none;
-    font-size:15px;
-    background:rgba(255,255,255,0.9);
-    box-shadow:0 10px 25px rgba(0,0,0,0.08);
-    margin-top:20px;
     outline:none;
+    border-radius:15px;
+    padding:20px;
+    background:#1e293b;
+    color:white;
+    font-size:15px;
+    resize:none;
 }
 
-textarea:focus{
-    border:2px solid #3498db;
+textarea::placeholder{
+    color:#94a3b8;
 }
+
+/* BUTTON */
 
 .button-group{
     display:flex;
     gap:15px;
     margin-top:20px;
-    flex-wrap:wrap;
 }
 
 button{
@@ -82,82 +115,90 @@ button{
     padding:14px;
     border:none;
     border-radius:12px;
-    cursor:pointer;
     font-size:15px;
-    font-weight:bold;
+    cursor:pointer;
     transition:0.3s;
+    font-weight:bold;
 }
 
-.btn-primary{
-    background:linear-gradient(to right,#3498db,#1f78d1);
+.btn-analisis{
+    background:#0ea5e9;
     color:white;
 }
 
-.btn-primary:hover{
+.btn-analisis:hover{
+    background:#0284c7;
     transform:translateY(-2px);
-    box-shadow:0 8px 15px rgba(52,152,219,0.3);
 }
 
 .btn-pdf{
-    background:linear-gradient(to right,#27ae60,#1e8449);
+    background:#22c55e;
     color:white;
 }
 
 .btn-pdf:hover{
+    background:#16a34a;
     transform:translateY(-2px);
-    box-shadow:0 8px 15px rgba(39,174,96,0.3);
 }
 
+/* RESULT */
+
 .hasil{
-    margin-top:35px;
+    margin-top:30px;
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
     gap:20px;
 }
 
 .card{
-    background:white;
+    background:rgba(255,255,255,0.05);
+    border:1px solid rgba(255,255,255,0.08);
     border-radius:18px;
     padding:20px;
-    box-shadow:0 10px 25px rgba(0,0,0,0.08);
+    backdrop-filter:blur(12px);
     transition:0.3s;
-    border-top:6px solid #3498db;
 }
 
 .card:hover{
     transform:translateY(-5px);
+    border-color:#38bdf8;
 }
 
 .card h3{
+    color:#38bdf8;
     margin-bottom:15px;
-    color:#1f3c88;
+    font-size:20px;
 }
 
 .card p{
-    line-height:1.7;
-    color:#444;
+    line-height:1.8;
+    color:#e2e8f0;
 }
 
-.info-box{
-    margin-top:25px;
-    background:#eef7ff;
-    padding:18px;
-    border-radius:15px;
-    border-left:5px solid #3498db;
-    line-height:1.7;
-}
+/* FOOTER */
 
-footer{
-    margin-top:40px;
-    text-align:center;
-    color:#666;
+.footer{
+    margin-top:30px;
+    color:#94a3b8;
     font-size:14px;
 }
 
+/* MOBILE */
+
 @media(max-width:768px){
 
-    .hero h1{
-        font-size:30px;
+    body{
+        flex-direction:column;
+    }
+
+    .sidebar{
+        width:100%;
+        border-right:none;
+        border-bottom:1px solid rgba(255,255,255,0.1);
+    }
+
+    .main{
+        padding:20px;
     }
 
     .button-group{
@@ -170,38 +211,53 @@ footer{
 
 <body>
 
-<div class="hero">
+<div class="sidebar">
 
-    <h1>🩺 Smart SBAR Handover System</h1>
+    <div class="logo">
+        🩺 SBAR System
+    </div>
 
-    <p class="subtitle">
-        Sistem digital dokumentasi dan klasifikasi laporan pasien 
-        berbasis metode SBAR untuk meningkatkan efektivitas komunikasi 
-        antar perawat dalam proses handover pasien.
-    </p>
+    <div class="menu">
+        <div>📋 Shift Report</div>
+        <div>🧠 SBAR Classification</div>
+        <div>📄 Export PDF</div>
+        <div>🏥 Nursing Dashboard</div>
+    </div>
 
 </div>
 
-<div class="main-card">
+<div class="main">
 
-    <h2>📋 Input Laporan Pasien</h2>
+    <div class="header">
 
-    <textarea id="laporan"
-    placeholder="Contoh:
-Pasien sesak napas sejak pagi.
-Riwayat PPOK dan hipertensi.
-RR 30x/menit dan SpO2 89%.
-Disarankan pemberian oksigen."></textarea>
+        <h1>Smart SBAR Handover Dashboard</h1>
 
-    <div class="button-group">
+        <p>
+            Sistem digital klasifikasi laporan pasien berbasis metode SBAR 
+            untuk membantu efektivitas komunikasi klinis antar perawat 
+            dalam proses handover pasien.
+        </p>
 
-        <button class="btn-primary" onclick="prosesSBAR()">
+    </div>
+
+    <div class="input-box">
+
+        <textarea id="laporan"
+        placeholder="Masukkan laporan pasien di sini..."></textarea>
+
+        <div class="button-group">
+
+            <button class="btn-analisis"
+            onclick="prosesSBAR()">
             🔍 Analisis SBAR
-        </button>
+            </button>
 
-        <button class="btn-pdf" onclick="downloadPDF()">
+            <button class="btn-pdf"
+            onclick="downloadPDF()">
             📄 Export PDF
-        </button>
+            </button>
+
+        </div>
 
     </div>
 
@@ -229,11 +285,10 @@ Disarankan pemberian oksigen."></textarea>
 
     </div>
 
-    <div class="info-box">
-        <b>Informasi:</b><br>
-        Website ini menggunakan pendekatan 
-        <i>keyword-based classification</i> untuk membantu 
-        pengelompokan data handover pasien berdasarkan metode SBAR.
+    <div class="footer">
+        <hr style="margin:25px 0;border-color:rgba(255,255,255,0.1);">
+
+        Dibuat oleh Sahidah • Mahasiswa Keperawatan
     </div>
 
 </div>
@@ -356,7 +411,7 @@ async function downloadPDF(){
 
 <footer>
 <hr style="margin-bottom:15px;">
-<p>Dibuat oleh: Sahidah</p>
+<p>Dibuat oleh: Alfi Alisa Sahidah</p>
 <p>Mahasiswa Keperawatan</p>
 </footer>
 
