@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Smart SBAR Handover System</title>
+
+<!-- PDF Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Segoe UI',sans-serif;
+    background:linear-gradient(135deg,#dfefff,#f7fbff);
+    min-height:100vh;
+    padding:40px 20px;
+    color:#2c3e50;
+}
+
+.hero{
+    text-align:center;
+    margin-bottom:40px;
+}
+
+.hero h1{
+    font-size:42px;
+    margin-bottom:10px;
+    color:#1f3c88;
+}
+
+.subtitle{
+    max-width:750px;
+    margin:auto;
+    line-height:1.7;
+    color:#555;
+    font-size:16px;
+}
+
+.main-card{
+    background:rgba(255,255,255,0.75);
+    backdrop-filter:blur(12px);
+    border-radius:25px;
+    padding:30px;
+    box-shadow:0 15px 35px rgba(0,0,0,0.1);
+}
+
+textarea{
+    width:100%;
+    min-height:220px;
+    padding:20px;
+    border:none;
+    border-radius:20px;
+    resize:none;
+    font-size:15px;
+    background:rgba(255,255,255,0.9);
+    box-shadow:0 10px 25px rgba(0,0,0,0.08);
+    margin-top:20px;
+    outline:none;
+}
+
+textarea:focus{
+    border:2px solid #3498db;
+}
+
+.button-group{
+    display:flex;
+    gap:15px;
+    margin-top:20px;
+    flex-wrap:wrap;
+}
+
+button{
+    flex:1;
+    padding:14px;
+    border:none;
+    border-radius:12px;
+    cursor:pointer;
+    font-size:15px;
+    font-weight:bold;
+    transition:0.3s;
+}
+
+.btn-primary{
+    background:linear-gradient(to right,#3498db,#1f78d1);
+    color:white;
+}
+
+.btn-primary:hover{
+    transform:translateY(-2px);
+    box-shadow:0 8px 15px rgba(52,152,219,0.3);
+}
+
+.btn-pdf{
+    background:linear-gradient(to right,#27ae60,#1e8449);
+    color:white;
+}
+
+.btn-pdf:hover{
+    transform:translateY(-2px);
+    box-shadow:0 8px 15px rgba(39,174,96,0.3);
+}
+
+.hasil{
+    margin-top:35px;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    gap:20px;
+}
+
+.card{
+    background:white;
+    border-radius:18px;
+    padding:20px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.08);
+    transition:0.3s;
+    border-top:6px solid #3498db;
+}
+
+.card:hover{
+    transform:translateY(-5px);
+}
+
+.card h3{
+    margin-bottom:15px;
+    color:#1f3c88;
+}
+
+.card p{
+    line-height:1.7;
+    color:#444;
+}
+
+.info-box{
+    margin-top:25px;
+    background:#eef7ff;
+    padding:18px;
+    border-radius:15px;
+    border-left:5px solid #3498db;
+    line-height:1.7;
+}
+
+footer{
+    margin-top:40px;
+    text-align:center;
+    color:#666;
+    font-size:14px;
+}
+
+@media(max-width:768px){
+
+    .hero h1{
+        font-size:30px;
+    }
+
+    .button-group{
+        flex-direction:column;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="hero">
+
+    <h1>🩺 Smart SBAR Handover System</h1>
+
+    <p class="subtitle">
+        Sistem digital dokumentasi dan klasifikasi laporan pasien 
+        berbasis metode SBAR untuk meningkatkan efektivitas komunikasi 
+        antar perawat dalam proses handover pasien.
+    </p>
+
+</div>
+
+<div class="main-card">
+
+    <h2>📋 Input Laporan Pasien</h2>
+
+    <textarea id="laporan"
+    placeholder="Contoh:
+Pasien sesak napas sejak pagi.
+Riwayat PPOK dan hipertensi.
+RR 30x/menit dan SpO2 89%.
+Disarankan pemberian oksigen."></textarea>
+
+    <div class="button-group">
+
+        <button class="btn-primary" onclick="prosesSBAR()">
+            🔍 Analisis SBAR
+        </button>
+
+        <button class="btn-pdf" onclick="downloadPDF()">
+            📄 Export PDF
+        </button>
+
+    </div>
+
+    <div class="hasil">
+
+        <div class="card">
+            <h3>Situation</h3>
+            <p id="situation"></p>
+        </div>
+
+        <div class="card">
+            <h3>Background</h3>
+            <p id="background"></p>
+        </div>
+
+        <div class="card">
+            <h3>Assessment</h3>
+            <p id="assessment"></p>
+        </div>
+
+        <div class="card">
+            <h3>Recommendation</h3>
+            <p id="recommendation"></p>
+        </div>
+
+    </div>
+
+    <div class="info-box">
+        <b>Informasi:</b><br>
+        Website ini menggunakan pendekatan 
+        <i>keyword-based classification</i> untuk membantu 
+        pengelompokan data handover pasien berdasarkan metode SBAR.
+    </div>
+
+</div>
+
+<script>
+
+function prosesSBAR(){
+
+    let text = document.getElementById("laporan").value;
+
+    let kalimat = text.split(".");
+
+    let situation = [];
+    let background = [];
+    let assessment = [];
+    let recommendation = [];
+
+    kalimat.forEach(k => {
+
+        let isi = k.toLowerCase().trim();
+
+        // Situation
+        if(
+            isi.includes("sesak") ||
+            isi.includes("nyeri") ||
+            isi.includes("demam") ||
+            isi.includes("mual") ||
+            isi.includes("pusing")
+        ){
+            situation.push(k.trim());
+        }
+
+        // Background
+        else if(
+            isi.includes("riwayat") ||
+            isi.includes("diabetes") ||
+            isi.includes("hipertensi") ||
+            isi.includes("ppok") ||
+            isi.includes("asma")
+        ){
+            background.push(k.trim());
+        }
+
+        // Assessment
+        else if(
+            isi.includes("rr") ||
+            isi.includes("spo2") ||
+            isi.includes("td") ||
+            isi.includes("nadi") ||
+            isi.includes("suhu")
+        ){
+            assessment.push(k.trim());
+        }
+
+        // Recommendation
+        else if(
+            isi.includes("anjurkan") ||
+            isi.includes("disarankan") ||
+            isi.includes("berikan") ||
+            isi.includes("kolaborasi") ||
+            isi.includes("monitor")
+        ){
+            recommendation.push(k.trim());
+        }
+
+    });
+
+    document.getElementById("situation").innerText =
+        situation.join(". ") || "-";
+
+    document.getElementById("background").innerText =
+        background.join(". ") || "-";
+
+    document.getElementById("assessment").innerText =
+        assessment.join(". ") || "-";
+
+    document.getElementById("recommendation").innerText =
+        recommendation.join(". ") || "-";
+}
+
+async function downloadPDF(){
+
+    const { jsPDF } = window.jspdf;
+
+    const doc = new jsPDF();
+
+    let situation =
+        document.getElementById("situation").innerText;
+
+    let background =
+        document.getElementById("background").innerText;
+
+    let assessment =
+        document.getElementById("assessment").innerText;
+
+    let recommendation =
+        document.getElementById("recommendation").innerText;
+
+    doc.setFontSize(20);
+    doc.text("SBAR Shift Report",20,20);
+
+    doc.setFontSize(12);
+
+    doc.text("Situation:",20,40);
+    doc.text(situation || "-",20,50);
+
+    doc.text("Background:",20,75);
+    doc.text(background || "-",20,85);
+
+    doc.text("Assessment:",20,110);
+    doc.text(assessment || "-",20,120);
+
+    doc.text("Recommendation:",20,145);
+    doc.text(recommendation || "-",20,155);
+
+    doc.save("SBAR_Report.pdf");
+}
+
+</script>
+
+<footer>
+<hr style="margin-bottom:15px;">
+<p>Dibuat oleh: Sahidah</p>
+<p>Mahasiswa Keperawatan</p>
+</footer>
+
+</body>
+</html>
